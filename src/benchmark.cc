@@ -1,5 +1,6 @@
 
 #include <thread>
+#include <utility>
 
 #include "benchmark.h"
 
@@ -49,7 +50,7 @@ Result Benchmark::run() {
 		// finally, aggregate results into CombinedStats
 		auto combinedStats = CombinedStats(workload);
 		for (const auto &state : workerStates) {
-			combinedStats.addStats(state->stats);
+			combinedStats.addStats(std::move(state->stats));
 			delete state;
 		}
 
@@ -133,15 +134,15 @@ Result Benchmark::getWorkloadMethod(const std::string &workload, std::function<v
 }
 
 void Benchmark::writeSeq(ThreadState* thread) {
-	thread->stats.start();
+	thread->stats->start();
 	doWrite(thread, WriteMode::SEQUENTIAL);
-	thread->stats.stop();
+	thread->stats->stop();
 }
 
 void Benchmark::writeRandom(ThreadState* thread) {
-	thread->stats.start();
+	thread->stats->start();
 	doWrite(thread, WriteMode::RANDOM);
-	thread->stats.stop();
+	thread->stats->stop();
 }
 
 void Benchmark::doWrite(ThreadState* thread, WriteMode mode) {
@@ -156,7 +157,7 @@ void Benchmark::doWrite(ThreadState* thread, WriteMode mode) {
 		}
 		kv->put(key, value);
 		uint64_t size = key.size() + value.size();
-		thread->stats.finishedSingleOp(size);
+		thread->stats->finishedSingleOp(size);
 	}
 }
 

@@ -13,7 +13,9 @@ enum WriteMode { RANDOM, SEQUENTIAL };
 
 struct ThreadState {
 	int tid;
-	Stats stats;
+	std::unique_ptr<Stats> stats;
+
+	ThreadState(int id) : tid(id), stats(std::make_unique<Stats>()) {}
 };
 
 class Benchmark {
