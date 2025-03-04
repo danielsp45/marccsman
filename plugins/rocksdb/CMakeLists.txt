@@ -1,14 +1,24 @@
 cmake_minimum_required(VERSION 3.10)
-project(rocksdb_adapter)
+project(marccsman)
 
-# Build the RocksDB adapter as a shared library.
-add_library(rocksdb_adapter SHARED rocksdb_adapter.cc)
+# Set the path to the RocksDB CMake configuration files installed by Nix.
+# Adjust the path if your RocksDB version or location differs.
+set(RocksDB_DIR "/nix/store/9q13xc9zf421k8401aslign8549wycv8-rocksdb-9.7.4/lib/cmake/RocksDB")
 
-# Include core headers if needed.
-target_include_directories(rocksdb_adapter PRIVATE ${CMAKE_SOURCE_DIR}/src)
+# Find RocksDB using the config file.
+find_package(RocksDB REQUIRED)
 
-# Link against the core library so that KVStoreFactory and other common code are available.
-target_link_libraries(rocksdb_adapter PRIVATE marccsman_core)
+# Create the marccsman_core library (your core benchmark code)
+add_library(marccsman_core SHARED 
+    src/some_core_file.cc
+    # Add other source files here...
+)
 
-# Optionally, link against any additional libraries (e.g., RocksDB) here.
-# target_link_libraries(rocksdb_adapter PRIVATE rocksdb)
+# Include our source directory and RocksDB's include directories.
+target_include_directories(marccsman_core PRIVATE 
+    ${CMAKE_SOURCE_DIR}/src
+    ${RocksDB_INCLUDE_DIRS}
+)
+
+# Link marccsman_core against RocksDB.
+target_link_libraries(marccsman_core PRIVATE ${RocksDB_LIBRARIES})
