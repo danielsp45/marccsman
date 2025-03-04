@@ -5,6 +5,9 @@
 #include <vector>
 #include <cstdint>
 #include <string>
+#include <memory>
+#include <functional>
+#include <algorithm>
 
 // --------------------------
 // SimpleClock: a minimal clock class
