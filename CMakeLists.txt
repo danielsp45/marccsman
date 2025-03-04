@@ -26,8 +26,8 @@ target_link_libraries(marccsman PRIVATE marccsman_core pthread)
 # Optionally, if you need to link any plugins that are statically built:
 # target_link_libraries(marccsman PRIVATE some_static_plugin)
 
-# Define adapter directories.
-set(ADAPTER_DIRS rocksdb dummy leveldb)
+# Gather adapter directories.
+file(GLOB ADAPTER_DIRS RELATIVE ${CMAKE_SOURCE_DIR}/adapters ${CMAKE_SOURCE_DIR}/adapters/*)
 
 # Add subdirectories for each adapter.
 foreach(dir ${ADAPTER_DIRS})

@@ -1,5 +1,6 @@
 // Purpose: Ignore files and directories in git
 build/
+adapters/
 
 # Prerequisites
 *.d
