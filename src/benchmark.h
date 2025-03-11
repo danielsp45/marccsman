@@ -11,6 +11,15 @@
 
 enum WriteMode { RANDOM, SEQUENTIAL };
 
+// Define the types of distributions you want.
+enum class DistributionType {
+    Fixed,
+    Uniform,
+    Normal,
+    Zipfian,
+    Latest
+};
+
 struct ThreadState {
 	int tid;
 	std::unique_ptr<Stats> stats;
@@ -31,6 +40,7 @@ private:
 	int num = 1000;
 	int key_size = 16;
 	int value_size = 1000;
+	DistributionType distribution = DistributionType::Uniform;
 	std::vector<std::string> workloads = {"fillseq"};
 	int threads = 1;
 
@@ -45,6 +55,11 @@ private:
 	void writeRandom(ThreadState* thread);
 	void doWrite(ThreadState* thread, WriteMode mode);
 	void readRandom(ThreadState* thread);
+	void YCSBA(ThreadState* thread);
+	void YCSBB(ThreadState* thread);
+	void YCSBC(ThreadState* thread);
+	void YCSBD(ThreadState* thread);
+	void YCSBE(ThreadState* thread);
 };
 
 #endif // BENCHMARK_H

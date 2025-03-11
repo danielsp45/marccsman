@@ -40,11 +40,29 @@ void Stats::start() {
 	opLatencies_.clear();
 }
 
-void Stats::finishedSingleOp(uint64_t opBytes) {
-	uint64_t now = clock_->nowMicros();
-	opLatencies_.push_back(now - lastOpTime_);
-    finishedOps(1, opBytes);
-	lastOpTime_ = now;
+
+void Stats::finishedReadOp(uint64_t opBytes, bool found) {
+    uint64_t now = clock_->nowMicros();
+    opLatencies_.push_back(now - lastOpTime_);
+    lastOpTime_ = now;
+    reads_++;
+    if (found) {
+        found_++;
+    }
+}
+
+void Stats::finishedWriteOp(uint64_t opBytes) {
+    uint64_t now = clock_->nowMicros();
+    opLatencies_.push_back(now - lastOpTime_);
+    lastOpTime_ = now;
+    writes_++;
+}
+
+void Stats::finishedDeleteOp(uint64_t opBytes) {
+    uint64_t now = clock_->nowMicros();
+    opLatencies_.push_back(now - lastOpTime_);
+    lastOpTime_ = now;
+    deletes_++;
 }
 
 void Stats::finishedOps(int64_t numOps, uint64_t opBytes) {

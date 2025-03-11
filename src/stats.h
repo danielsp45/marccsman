@@ -18,6 +18,12 @@ public:
     uint64_t nowMicros() const;
 };
 
+enum class OperationType {
+    READ,
+    WRITE,
+    DELETE
+};
+
 //
 // Stats: Per-thread statistics
 //
@@ -29,7 +35,9 @@ public:
     // Initialize or reset stats.
     void start();
     // Record a single operation.
-    void finishedSingleOp(uint64_t opBytes);
+    void finishedReadOp(uint64_t opBytes, bool found);
+    void finishedWriteOp(uint64_t opBytes);
+    void finishedDeleteOp(uint64_t opBytes);
     // Record a batch of operations.
     void finishedOps(int64_t numOps, uint64_t opBytes);
     // Finalize stats and compute elapsed time.
@@ -56,6 +64,10 @@ private:
     uint64_t done_;   // total operations
     uint64_t bytes_;  // total bytes processed
     double seconds_;
+    int reads_;
+    int writes_;
+    int deletes_;
+    int found_;
 	// store individual operation latencies
 	std::vector<double> opLatencies_;
 };
